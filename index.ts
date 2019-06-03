@@ -8,6 +8,7 @@ import { map } from 'rxjs/operators';
 const searchResults$ = fromEvent(dom.$input, 'input').pipe(
   map(e => (e.target as HTMLInputElement).value),
   map(getNames),
+  map(results => results.slice(0, 10))
 );
 
 searchResults$.subscribe(dom.renderList);
