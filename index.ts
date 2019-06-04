@@ -3,7 +3,7 @@ import * as dom from './dom'
 
 import { Observable, Observer, fromEvent, merge} from 'rxjs'
 // import { of } from 'rxjs'; 
-import { map, filter, tap, shareReplay, distinctUntilChanged, switchMap  } from 'rxjs/operators';
+import { map, filter, tap, shareReplay, distinctUntilChanged, switchMap, startWith  } from 'rxjs/operators';
 
 import { employeesByName } from './model'
 
@@ -23,23 +23,23 @@ const searchResults$ = phrase$.pipe(
   map(employyes => employyes.map(e => `${e.firstName} ${e.lastName}`)),
   
   map(results => results.slice(0, 10)),
-  tap(dom.renderList),
 );
 
 // searchResults$.subscribe(dom.renderList);
 
 const searchClear$ = phrase$.pipe(
-  tap((p) => console.log(p, 'CLEAR')),
-  filter(phrase => phrase.length <= 2),
-  tap(dom.clearList),
 )
 
 const autocomplete$ = phrase$.pipe(
   tap(p => console.log(p, 'PRZED')),
   
   switchMap((phrase) => phrase.length > 2 
-    ? searchResults$
-    : searchClear$
+    ? searchResults$.pipe(
+      tap(dom.renderList),
+    )
+    : phrase$.pipe(
+      tap(dom.clearList),
+    )
   ),
   tap(p => console.log(p, 'PO')),
 )
