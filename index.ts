@@ -1,9 +1,9 @@
 import { names, getNames } from './data'
 import * as dom from './dom'
 
-import { Observable, Observer, fromEvent, merge} from 'rxjs'
-// import { of } from 'rxjs'; 
-import { map, filter, tap, shareReplay, distinctUntilChanged, switchMap, startWith  } from 'rxjs/operators';
+import { Observable, Observer, fromEvent} from 'rxjs'
+import { of } from 'rxjs'; 
+import { map, filter, tap, shareReplay, distinctUntilChanged, switchMap, startWith, merge  } from 'rxjs/operators';
 
 import { employeesByName } from './model'
 
@@ -35,9 +35,10 @@ const autocomplete$ = phrase$.pipe(
   
   switchMap((phrase) => phrase.length > 2 
     ? searchResults$.pipe(
+      merge(of([])),
       tap(dom.renderList),
     )
-    : phrase$.pipe(
+    : of(1).pipe(
       tap(dom.clearList),
     )
   ),
