@@ -7,3 +7,9 @@ export const employees$ = ajax.getJSON(`${baseURL}/employees`).pipe(
   publishLast(),
   refCount(),
 )
+
+export const employeesByName = 
+  (firstName: string) => ajax.getJSON(`${baseURL}/employees?firstName_like=${firstName}`).pipe(
+    publishLast(),
+    refCount(),
+  )

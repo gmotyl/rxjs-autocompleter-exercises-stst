@@ -7,6 +7,9 @@ import { map, filter, tap, share, distinctUntilChanged } from 'rxjs/operators';
 
 import { employees$ } from './model'
 
+employees$.subscribe(console.log)
+employees$.subscribe(console.log)
+
 const phrase$ = fromEvent(dom.$input, 'input').pipe(
   map(e => (e.target as HTMLInputElement).value),
   distinctUntilChanged(),
