@@ -5,10 +5,7 @@ import { Observable, Observer, fromEvent, merge } from 'rxjs'
 // import { of } from 'rxjs'; 
 import { map, filter, tap, share, distinctUntilChanged } from 'rxjs/operators';
 
-import { employees$ } from './model'
-
-employees$.subscribe(console.log)
-employees$.subscribe(console.log)
+import { employeesByName } from './model'
 
 const phrase$ = fromEvent(dom.$input, 'input').pipe(
   map(e => (e.target as HTMLInputElement).value),
@@ -18,7 +15,13 @@ const phrase$ = fromEvent(dom.$input, 'input').pipe(
 )
 const searchResults$ = phrase$.pipe(
   filter(phrase => phrase.length > 2),
-  map(getNames),
+  // 1. local data
+  // map(getNames),
+
+  // 2. mock api (external) data
+  employeesByName(),
+  map(employyes => employyes.map(e => `${e.firstName} ${e.lastName}`)),
+  
   map(results => results.slice(0, 10)),
   tap(dom.renderList),
 );
