@@ -3,10 +3,13 @@ import * as dom from './dom'
 
 import { Observable, Observer, fromEvent, merge } from 'rxjs'
 // import { of } from 'rxjs'; 
-import { map, filter, tap, share } from 'rxjs/operators';
+import { map, filter, tap, share, distinctUntilChanged } from 'rxjs/operators';
+
+import { employees$ } from './model'
 
 const phrase$ = fromEvent(dom.$input, 'input').pipe(
   map(e => (e.target as HTMLInputElement).value),
+  distinctUntilChanged(),
   tap(console.log),
   share(),
 )
